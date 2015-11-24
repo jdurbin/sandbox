@@ -1,0 +1,13 @@
+#!/usr/bin/env groovy 
+
+str1="123345"
+str2="GSM3456"
+str3="GPL343454"
+
+digits = ~/\d+/
+
+println str1 ==~ digits
+println str2 ==~ digits
+println str3 ==~ digits
+
+

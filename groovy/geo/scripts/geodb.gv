@@ -1,0 +1,45 @@
+#!/usr/bin/env groovy 
+
+String dbLocation = "jdbc:sqlite:/Users/james/local/geo/GEOmetadb.sqlite"
+String dbDriver = "org.sqlite.JDBC"
+db = groovy.sql.Sql.newInstance(dbLocation, dbDriver)
+
+//db.eachRow
+rows = db.rows("""
+	select distinct(organism_ch1) from gsm
+""")
+
+// GroovyRowResult is what is returned. 
+rows.each{
+	println it
+}
+
+
+//[gsm:GSM1137, gpl:GPL85, technology:in situ oligonucleotide]
+
+// 
+// GSE: 57637
+// GSM: 1,377,859
+// GSM where channel_count == 1:  1,070,757
+// 
+
+/*
+//select distinct(gpl.technology) from gpl
+[technology:SAGE NlaIII]
+[technology:spotted DNA/cDNA]
+[technology:SAGE Sau3A]
+[technology:in situ oligonucleotide]
+[technology:spotted oligonucleotide]
+[technology:antibody]
+[technology:MS]
+[technology:SARST]
+[technology:SAGE RsaI]
+[technology:other]
+[technology:MPSS]
+[technology:RT-PCR]
+[technology:oligonucleotide beads]
+[technology:mixed spotted oligonucleotide/cDNA]
+[technology:spotted peptide or protein]
+[technology:null]
+[technology:high-throughput sequencing]
+*/

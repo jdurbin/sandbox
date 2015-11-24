@@ -1,0 +1,26 @@
+#!/usr/bin/env groovy 
+
+String dbLocation = "jdbc:sqlite:/Users/james/local/geo/GEOmetadb.sqlite"
+String dbDriver = "org.sqlite.JDBC"
+db = groovy.sql.Sql.newInstance(dbLocation, dbDriver)
+
+//db.eachRow
+rows = db.rows("""
+	select gsm.gsm,gsm.title,gsm.description,gsm.gpl,gpl.technology 
+	from gsm,gpl
+	where gpl.gpl = gsm.gpl and gpl.technology like '%high-throughput sequencing%' 
+	and gsm.title like '%stem%'
+	and gsm.organism_ch1='Homo sapiens'
+""")
+
+
+//There are 117,875 rnaSeq samples.
+//There are 38,942 human rnaSeq samples 
+println "There are ${rows.size()} rnaSeq samples."
+
+// GroovyRowResult is what is returned. 
+rows.each{
+	println it
+}
+
+

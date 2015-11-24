@@ -1,0 +1,6 @@
+
+
+task buildIt<<{
+	def cmd = "cat cmds.txt"
+	println cmd.execute().in.text
+}

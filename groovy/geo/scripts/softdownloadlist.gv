@@ -1,0 +1,49 @@
+#!/usr/bin/env groovy 
+
+@Grab(group='commons-net', module='commons-net', version='2.0')
+import org.apache.commons.net.ftp.FTPClient
+
+
+server = "ftp.ncbi.nlm.nih.gov"
+gdsIDs = ["GDS1022","GDS1023","GDS2194"]
+
+new FTPClient().with {
+	print "Connecting to $server..."
+    connect server
+    enterLocalPassiveMode()
+    login "anonymous", "kdurbin@ucsc.edu"
+	println "done."
+
+	gdsIDs.each{gdsID->
+		print "Downloading ${fileName(gdsID)}..."
+		changeWorkingDirectory workingDir(gdsID)
+    	def incomingFile = new File("raw_data/${fileName(gdsID)}")
+    	incomingFile.withOutputStream { 
+			ostream -> retrieveFile fileName(gdsID), ostream 
+		}
+		println "done."
+	}
+	disconnect()
+}
+
+/**
+* Generate the NCBI working directory given a GDSID
+* GDS1001 -> /geo/datasets/GDS1nnn/GDS1001/soft/
+*/ 
+def workingDir(gdsID){
+	def root
+	if (gdsID.size() < 7) root = "GDSnnn"
+	else{
+		// Use character at 3 to construct name.
+		root = "GDS${gdsID[3]}nnn"
+	}
+	path = "/geo/datasets/$root/$gdsID/soft/"
+	return(path)
+}
+
+/***
+* Generate the filename given a GDSID
+*/ 
+def fileName(gdsID){
+	return("${gdsID}_full.soft.gz")
+}

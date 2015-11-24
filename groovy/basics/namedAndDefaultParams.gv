@@ -1,0 +1,41 @@
+#!/usr/bin/env groovy
+
+// Groovy default parameters:
+say()
+say("Hi")
+say("Hi","Mark")
+
+def say(msg="Hello",name="world"){
+	println "$msg $name"
+}
+
+// Named parameters (and bonus, lack of need for parenthesis)
+send from:"john@example.com",
+     to:"mike@example.com",
+     subject:"greetings",
+     body:"Hello Goodbye"
+	 
+def send(params) {	
+	   println "sender ${params.from}"
+	   println "sender ${params.to}"
+	   println "sender ${params.subject}"
+	   println "sender ${params.body}"
+}
+
+shout()
+shout(to:"Dad")
+shout(from:"Dad")
+
+def shout(params=[:]){
+	params.to = params.to ?: "Mom"
+	params.from = params.from ?: "Little Suzie"
+	
+	println "${params.from} SHOUTS AT ${params.to}"
+}
+
+plot("BobChart","Size vs Weight")
+
+
+def plot(chart,chartTitle,chartSize=5){	
+	println "$chart\t$chartTitle\t$chartSize"
+}

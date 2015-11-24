@@ -1,0 +1,16 @@
+#!/usr/bin/env groovy 
+
+
+@Grab(group='commons-net', module='commons-net', version='2.0')
+import org.apache.commons.net.ftp.FTPClient
+
+/*
+server = "ftp.ncbi.nlm.nih.gov"
+new FTPClient().with {
+	print "Connecting to $server..."
+    connect server
+    enterLocalPassiveMode()
+    login "anonymous", "kdurbin@ucsc.edu"
+	println "done."
+}
+*/

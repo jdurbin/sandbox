@@ -1,0 +1,62 @@
+#!/usr/bin/env groovy 
+
+@Grab(group='commons-net', module='commons-net', version='2.0')
+import org.apache.commons.net.ftp.FTPClient
+
+
+server = "ftp.ncbi.nlm.nih.gov"
+gdsIDs = ["GDS1022","GDS1023","GDS2194"]
+
+
+new FTPClient().with {
+	print "Connecting to $server..."
+    connect server
+    enterLocalPassiveMode()
+    login "anonymous", "kdurbin@ucsc.edu"
+	println "done."
+
+	total = 0
+	changeWorkingDirectory "/geo/datasets/GDSnnn"
+	files = listFiles()
+	total+= files.size()
+	println "/geo/datasets/GDSnnn: "+files.size()
+	
+	(0..5).each{
+		changeWorkingDirectory "/geo/datasets/GDS${it}nnn"
+		files = listFiles()
+		total+=files.size()
+		println "/geo/datasets/GDS${it}nnn: "+files.size()
+	}
+	disconnect()
+	
+	println "Total: $total"
+}
+
+/***
+Connecting to ftp.ncbi.nlm.nih.gov...done.
+/geo/datasets/GDSnnn: 628
+/geo/datasets/GDS0nnn: 628
+/geo/datasets/GDS1nnn: 664
+/geo/datasets/GDS2nnn: 849
+/geo/datasets/GDS3nnn: 856
+/geo/datasets/GDS4nnn: 775
+/geo/datasets/GDS5nnn: 76
+Total: 4476
+
+*/
+
+/*
+GEO Main page says:
+3848 DataSet records
+
+Search for "human", get these stats:
+
+DataSets (1912)
+Series (27410)
+Samples (922257)
+Platforms (4871)
+
+How there can be more platforms than datasets I'm not sure... maybe platforms 
+counts across experiments that aren't in a curated dataset. 
+
+*/

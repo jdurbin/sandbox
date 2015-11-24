@@ -1,0 +1,10 @@
+#!/usr/bin/env groovy 
+
+m = [:]
+
+
+m['alice'] = 22
+m['bob'] = 30
+m['mary'] = 40
+
+if (m.containsKey("bob")) println "Bob!"

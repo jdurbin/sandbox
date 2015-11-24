@@ -1,0 +1,12 @@
+#!/usr/bin/env groovy 
+
+
+A = ['A','B','C','D']
+B = ['B','D','E']
+
+
+println A-B
+
+println B-A
+
+println A.intersect(B)

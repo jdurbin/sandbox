@@ -1,0 +1,13 @@
+#!/usr/bin/env groovy 
+
+import durbin.util.*
+
+t = new DoubleTable(args[0])
+println "${t.rows()},${t.cols()}"
+
+
+// 11650,5372
+// real	0m8.800s
+
+// 11650,8293
+// real	0m13.296s

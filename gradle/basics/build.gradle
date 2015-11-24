@@ -1,0 +1,28 @@
+// This illustrates the basic fact that the default stuff in a task is configuration and 
+// only the doLast part is conditional on the target. 
+
+
+task hello{
+	println "Hi from Hello configuration!"
+	doLast {
+		println "Hello!"
+	}
+}
+
+// This is a shorthand for no initiliztion and doLast{}
+// So this task will be executed only when the conditional is 
+// named, as in "gradle inthemiddle"
+task inthemiddle <<{
+	println "Hi from INTHEMIDDLE.  Don't know when this get's done. "
+}
+
+task goodbye{
+	println "Hi from Goodbye configuration!"	
+	doLast{ doGoodbye()}
+}
+
+def doGoodbye(){
+	(1..5).each{
+		println "Bye!"
+	}
+}

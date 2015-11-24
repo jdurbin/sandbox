@@ -1,0 +1,34 @@
+#!/usr/bin/env groovy 
+
+@Grab(group='commons-net', module='commons-net', version='2.0')
+import org.apache.commons.net.ftp.FTPClient
+
+gds = "GDS1022"
+// GDS96 -> GDSnnn
+// 
+
+//ftp://ftp.ncbi.nlm.nih.gov/geo/datasets/GDS1nnn/GDS1001/soft/GDS1001.soft.gz
+//ftp://ftp.ncbi.nlm.nih.gov/geo/datasets/GDS1nnn/GDS1001/soft/GDS1001_full.soft.gz
+
+server = "ftp.ncbi.nlm.nih.gov"
+workingDir = "geo/datasets/GDS1nnn/GDS1001/soft/"
+localFile = "raw_data/GDS1001_full.soft.gz"
+remoteFile = "GDS1001_full.soft.gz"
+
+new FTPClient().with {
+	print "Connecting to $server..."
+    connect server
+    enterLocalPassiveMode()
+    login "anonymous", "kdurbin@ucsc.edu"
+	println "done."
+
+	print "Downloading $remoteFile..."
+	changeWorkingDirectory workingDir
+    def incomingFile = new File(localFile)
+    incomingFile.withOutputStream { 
+		ostream -> retrieveFile remoteFile, ostream 
+	}
+			
+    disconnect()
+	println "done."
+}

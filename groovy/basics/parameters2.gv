@@ -1,0 +1,41 @@
+#!/usr/bin/env groovy
+
+
+
+// Groovy default parameters:
+say()
+say("Hi")
+say("Hi","Mark")
+
+def say(msg="Hello",name="world"){
+	println "$msg $name"
+}
+
+
+// Named parameters (and bonus, lack of need for parenthesis)
+send from:"john@example.com",
+     to:"mike@example.com",
+     subject:"greetings",
+     body:"Hello Goodbye"
+	 
+def send(params) {	
+	   println "sender ${params.from}"
+	   println "sender ${params.to}"
+	   println "sender ${params.subject}"
+	   println "sender ${params.body}"
+}
+
+
+// Can you combine these??  I think not!  But let's try:
+
+
+shout()
+
+def shout(params=['from':'bob','to':'mary']){
+	println params.from
+	println params.to
+	
+	//println "${params.from} SHOUTS at ${params.to}"
+}
+
+

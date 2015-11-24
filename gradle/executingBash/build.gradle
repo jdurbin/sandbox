@@ -1,0 +1,17 @@
+
+import durbin.util.*
+
+RunBash.enable()
+
+buildscript {
+    dependencies {
+		classpath fileTree(dir: 'libs', include: '*.jar')
+    }
+}
+
+task buildIt<<{
+	
+	def t = new durbin.util.Table()
+	
+	"ls ../*".bash()
+}

@@ -1,0 +1,15 @@
+#!/usr/bin/env groovy 
+
+
+v = 1.2345656789012345678890 as double
+v2 = 123.2345656789012345678890 as double
+
+v3 = "1.3458787"
+
+println v.round(4)
+println v.round(3)
+
+println v2.round(4)
+println v2.round(3)
+
+println Double.parseDouble(v3).round(2)

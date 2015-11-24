@@ -1,0 +1,27 @@
+#!/usr/bin/env groovy 
+
+
+class Foo{	
+}
+
+class Bar {
+}
+
+class FooBar {
+
+}
+
+
+
+
+
+c = new Bar()
+
+switch(c){
+	case {it instanceof FooBar}: println "FooBar";break;
+	case {it instanceof Bar}: println "Bar";break;
+	case {it instanceof Foo}: println "Foo";break;
+
+}
+
+

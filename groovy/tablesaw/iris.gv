@@ -1,0 +1,27 @@
+#!/usr/bin/env groovy 
+
+import static tech.tablesaw.aggregate.AggregateFunctions.*
+import tech.tablesaw.api.*
+import tech.tablesaw.columns.*
+import java.io.IOException;
+import tech.tablesaw.plotly.*;
+import tech.tablesaw.plotly.api.*;
+import tech.tablesaw.plotly.components.Figure;
+@Grab(group='tech.tablesaw',module='tablesaw-core',version='0.38.1')
+@Grab(group='tech.tablesaw',module='tablesaw-jsplot',version='0.38.1')
+
+
+iris = Table.read().csv("data/Iris.csv")
+
+// As it should be, a figure is an object, and you can easily create lists of figures. 
+figures = []
+figures << ScatterPlot.create("Iris data", iris,"SepalLengthCm","SepalWidthCm", "Species")																		
+figures << ScatterPlot.create("Iris Data2",iris,"SepalLengthCm","PetalWidthCm","Species")
+									
+
+for (figure in figures){
+	Plot.show(figure)
+}
+    
+					   
+				

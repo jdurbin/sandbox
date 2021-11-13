@@ -1,0 +1,36 @@
+#!/usr/bin/env groovy 
+import htsjdk.samtools.*
+import htsjdk.samtools.SamReaderFactory as SamReader
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics
+import groovyx.gpars.GParsPool
+
+@Grapes(
+  @Grab(group='com.github.samtools', module='htsjdk', version='2.20.2')
+)
+
+bamInName = args[0]
+
+sr = SamReader.makeDefault()
+				 .open(new File(bamInName))				 
+seqdict = sr.getFileHeader().getSequenceDictionary()	
+seqNameList = seqdict.getSequences().collect{seq->seq.getSequenceName()}
+print(seqNameList)
+sr.close()
+
+GParsPool.withPool(6){
+	seqNameList.eachParallel{chrIn->
+		try{
+			sr2 = SamReader.makeDefault().open(new File(bamInName))
+			bamIn = sr2.query(chrIn,0,0,false)				 
+			def stats = new DescriptiveStatistics();
+			for (a : bamIn) {
+				stats.addValue(a.getMappingQuality())
+			}
+			println("Seq ${chrIn}\t${stats.getN()}\t${stats.getMean().round(2)}")
+			sr2.close()
+		}catch(Exception e){
+			println("I has a sad with $chrIn: \t${e}")
+		}	
+	}
+}
+

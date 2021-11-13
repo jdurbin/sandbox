@@ -1,0 +1,9 @@
+{
+  "binsize": [32000],
+  "dil_size1": [11,21],
+  "dil_iter1": [1,2],
+  "dil_size2": [5,11],
+  "dil_iter2": [1,2],
+  "inter_z_thresh": [1,3],
+  "kernel_size": [21]
+}  

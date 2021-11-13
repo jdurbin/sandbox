@@ -1,0 +1,9 @@
+#!/usr/bin/env groovy 
+
+import BobClass
+
+
+bc = new BobClass()
+
+bc.doIt()
+

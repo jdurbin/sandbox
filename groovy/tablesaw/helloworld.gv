@@ -1,0 +1,14 @@
+#!/usr/bin/env groovy 
+
+import static tech.tablesaw.aggregate.AggregateFunctions.*
+import tech.tablesaw.api.*
+import tech.tablesaw.columns.*
+
+@Grab(group='tech.tablesaw',module='tablesaw-core',version='0.38.1')
+
+double[] numbers = [1, 2, 3, 4];
+DoubleColumn nc = DoubleColumn.create("nc", numbers);
+System.out.println(nc.print());
+
+DoubleColumn nc2 = nc.multiply(4);
+System.out.println(nc2.print());

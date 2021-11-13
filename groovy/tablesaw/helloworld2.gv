@@ -1,0 +1,18 @@
+#!/usr/bin/env groovy 
+
+import static tech.tablesaw.aggregate.AggregateFunctions.*
+import tech.tablesaw.api.*
+import tech.tablesaw.columns.*
+
+@Grab(group='tech.tablesaw',module='tablesaw-core',version='0.38.1')
+
+String[] animals = ["bear", "cat", "giraffe"];
+double[] cuteness = [90.1, 84.3, 99.7];
+
+Table cuteAnimals =
+    Table.create("Cute Animals")
+        .addColumns(
+            StringColumn.create("Animal types", animals),
+            DoubleColumn.create("rating", cuteness));
+            
+println(cuteAnimals)

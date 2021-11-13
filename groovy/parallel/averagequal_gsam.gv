@@ -1,0 +1,31 @@
+#!/usr/bin/env groovy 
+import Gsam 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics
+import htsjdk.samtools.*
+
+@Grapes(
+  @Grab(group='com.github.samtools', module='htsjdk', version='2.20.2')
+)
+
+
+// bamIn = gsam(bamInName)
+// bamIn = gsam(bamInName,chrIn)
+
+bamInName = args[0]
+
+def stats = new DescriptiveStatistics();
+
+bamIn = new Gsam(bamInName)
+for (a : bamIn){
+	stats.addValue(a.getMappingQuality())	
+}
+
+
+// Currently doesn't run because it can't find the hts file. 
+// Possible solutions?:
+// may have to put htsjdk.jar in classpath (otherwise Grape has it somewhere)
+// may have to statically load with Grapes in Gsam.gv 
+// 
+// 
+// Surely this is a solvable problem, and we can have the kind of sugary 
+// syntax we see above. 

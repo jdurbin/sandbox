@@ -1,0 +1,25 @@
+#!/usr/bin/env groovy 
+
+import static tech.tablesaw.aggregate.AggregateFunctions.*
+import tech.tablesaw.api.*
+import tech.tablesaw.columns.*
+import java.io.IOException;
+import tech.tablesaw.plotly.*;
+import tech.tablesaw.plotly.api.BubblePlot;
+import tech.tablesaw.plotly.api.ScatterPlot
+import tech.tablesaw.plotly.components.Figure;
+
+
+@Grab(group='tech.tablesaw',module='tablesaw-core',version='0.38.1')
+@Grab(group='tech.tablesaw',module='tablesaw-jsplot',version='0.38.1')
+
+
+Table wines = Table.read().csv("/Users/james/src/tablesaw/data/test_wines.csv")
+
+Figure figure = ScatterPlot.create("Wine prices and ratings", 
+                       wines, "Mean Retail", "highest pro score", "wine type")
+
+Plot.show(figure)
+    
+					   
+				

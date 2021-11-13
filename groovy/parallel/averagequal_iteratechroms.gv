@@ -1,0 +1,67 @@
+#!/usr/bin/env groovy 
+import htsjdk.samtools.*
+import htsjdk.samtools.SamReaderFactory as SamReader
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics
+
+@Grapes(
+  @Grab(group='com.github.samtools', module='htsjdk', version='2.20.2')
+)
+
+
+bamInName = args[0]
+
+sr = SamReader.makeDefault()
+				 .open(new File(bamInName))				 
+seqdict = sr.getFileHeader().getSequenceDictionary()	
+sr.close()
+
+for(seq : seqdict.getSequences()){
+	chrIn = seq.getSequenceName()
+	sr2 = SamReader.makeDefault().open(new File(bamInName))
+	bamIn = sr2.query(chrIn,0,0,false)				 
+	def stats = new DescriptiveStatistics();
+	for (a : bamIn) {
+		stats.addValue(a.getMappingQuality())
+	}
+	sr2.close()
+	println("Seq ${chrIn}\t${stats.getN()}\t${stats.getMean().round(2)}")
+}
+
+
+// averagequal_iteratechroms.gv /Users/james/projects/hla/capture/bam38/PC-HLA-EG4.bam
+
+// ./averagequal_iteratechroms.gv   28.85s user 0.99s system 148% cpu 20.110 total
+
+
+
+// Compare to straight through whole genome: 
+// Mean quality: 43.76016208787809
+// ./averagequal0.gv /Users/james/projects/hla/capture/bam38/PC-HLA-EG4.bam  22.35s user 0.86s system 145% cpu 15.957 totala
+
+// Seq chr1	618571	39.43
+// Seq chr10	334021	41.14
+// Seq chr11	300100	47.87
+// Seq chr12	300568	49.19
+// Seq chr13	174655	47.99
+// Seq chr14	202571	47.68
+// Seq chr15	173578	46.6
+// Seq chr16	272332	34.53
+// Seq chr17	244330	40.86
+// Seq chr18	167593	41.55
+// Seq chr19	259063	44.49
+// Seq chr2	480435	47.38
+// Seq chr20	180695	40.37
+// Seq chr21	154492	25.06
+// Seq chr22	116661	35.62
+// Seq chr3	427010	49.16
+// Seq chr4	424673	43.61
+// Seq chr5	421996	44.07
+// Seq chr6	962531	50.74
+// Seq chr7	347944	46.14
+// Seq chr8	300763	47.2
+// Seq chr9	269184	44.17
+// Seq chrM	206	40.83
+// Seq chrX	212138	42.25
+// Seq chrY	163887	7.4
+// ./averagequal_iteratechroms.gv   29.61s user 1.18s system 147% cpu 20.946 total
+

@@ -1,2 +1,3 @@
 # sandbox
-Place where I test out new technologies, syntax, etc.  
+Sandbox where I try out libraries, languages, etc. 
+Mostly very basic stuff just to see how some library or syntax works. 

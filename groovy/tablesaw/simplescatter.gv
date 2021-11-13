@@ -1,0 +1,21 @@
+#!/usr/bin/env groovy 
+
+import tech.tablesaw.api.*
+import tech.tablesaw.columns.*
+import tech.tablesaw.plotly.*;
+import tech.tablesaw.plotly.api.*;
+import tech.tablesaw.plotly.components.Figure;
+@Grab(group='tech.tablesaw',module='tablesaw-core',version='0.38.1')
+@Grab(group='tech.tablesaw',module='tablesaw-jsplot',version='0.38.1')
+
+random = new Random()
+
+
+Table rnd = Table.create("Valuyes")
+(0..4).each{
+	x = (0..10).collect{random.nextInt(10)}
+	rnd.addColumns(DoubleColumn.create("$it",x))
+}
+										
+Plot.show(ScatterPlot.create("Random Values",rnd,"1","2"))
+

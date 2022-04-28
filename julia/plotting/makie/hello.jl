@@ -2,7 +2,9 @@
 
 using CairoMakie
 
+CairoMakie.activate!(type = "png")
+
 x = range(0, 10, length=100)
 y = sin.(x)
-lines(x, y)
-
+scene = lines(x, y)
+save("plot.png",scene)

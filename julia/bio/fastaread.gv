@@ -1,0 +1,120 @@
+#!/usr/bin/env groovy 
+
+// ./fastaread.gv  12.60s user 1.02s system 252% cpu 5.388 total
+
+@Grapes(
+    @Grab(group='org.biojava', module='biojava-core', version='6.0.5')
+)
+
+import java.io.*; 
+import java.util.*;
+import org.biojava.nbio.core.sequence.*
+import org.biojava.nbio.core.sequence.compound.*
+import org.biojava.nbio.core.sequence.io.*
+import org.biojava.nbio.core.util.*
+import org.biojava.nbio.core.sequence.AccessionID;
+import org.biojava.nbio.core.sequence.io.template.SequenceHeaderParserInterface;
+import org.biojava.nbio.core.sequence.template.AbstractSequence;
+import org.biojava.nbio.core.sequence.template.Compound;
+import org.biojava.nbio.core.exceptions.CompoundNotFoundException;
+import org.biojava.nbio.core.sequence.DataSource;
+import org.biojava.nbio.core.sequence.ProteinSequence;
+import org.biojava.nbio.core.sequence.compound.AminoAcidCompound;
+import org.biojava.nbio.core.sequence.io.template.SequenceHeaderParserInterface;
+import org.biojava.nbio.core.sequence.template.AbstractSequence.AnnotationType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+
+
+
+public class MyFastaHeaderParser<S extends AbstractSequence<C>, C extends Compound>
+	implements SequenceHeaderParserInterface<S, C> {
+
+	@Override
+	public void parseHeader(String header, S sequence) {
+		sequence.setOriginalHeader(header);
+		def name = header.split(" ")[0]
+		sequence.setAccession(new AccessionID(name));
+	}
+}
+
+
+
+/**
+ * Read a fasta DNA sequence
+ * @param inStream
+ * @return
+ * @throws IOException
+ * 
+ * Function found online
+ */
+public static LinkedHashMap<String, DNASequence> readFastaDNASequence(
+    InputStream inStream) throws IOException {
+  FastaReader<DNASequence, NucleotideCompound> fastaReader = new FastaReader<DNASequence, NucleotideCompound>(
+      inStream,
+      new GenericFastaHeaderParser<DNASequence, NucleotideCompound>(),
+      new DNASequenceCreator(DNACompoundSet.getDNACompoundSet()));
+  return fastaReader.process();
+}
+
+
+// Simply function in Groovy way...
+def readFastaDNASequence2(InputStream inStream){
+  fastaReader = new FastaReader<DNASequence, NucleotideCompound>(inStream,
+      new GenericFastaHeaderParser<DNASequence, NucleotideCompound>(),
+      new DNASequenceCreator(DNACompoundSet.getDNACompoundSet()))
+	  
+  return fastaReader.process()
+}
+
+// Remap sequences to the short name instead of the entire header line. 
+def readFastaDNASequence3(InputStream inStream){
+  fastaReader = new FastaReader<DNASequence, NucleotideCompound>(inStream,
+      new GenericFastaHeaderParser<DNASequence, NucleotideCompound>(),
+      new DNASequenceCreator(DNACompoundSet.getDNACompoundSet()))
+	  
+	  fullname2seq = fastaReader.process()
+	  
+	  name2seq = [:]
+	  fullname2seq.each{fullname,seq->
+		  name = fullname.split(" ")[0]
+		  name2seq[name] = seq
+	  }
+  return name2seq
+}
+
+// Replace header parser with one of my own creation...
+def readFastaDNASequence4(InputStream inStream){
+  fastaReader = new FastaReader<DNASequence, NucleotideCompound>(inStream,
+      new MyFastaHeaderParser(),
+      new DNASequenceCreator(DNACompoundSet.getDNACompoundSet()))
+	  
+  return fastaReader.process()
+}
+
+// Read sequence dictionary for HLA
+seqFile = "data/hla_gen.fasta"
+bis = new BufferedInputStream(new FileInputStream(seqFile));
+famap = readFastaDNASequence4(bis)
+
+println("${famap.size()}")
+
+famap.each{k,v->
+	subseq = v.getSequenceAsString(1,20,Strand.POSITIVE)
+	println("${k}\t${subseq}")	
+}
+
+ s1name = "HLA:HLA22928"
+ s2name = "HLA:HLA21257" 
+ s1 = famap[s1name]
+ s2 = famap[s2name]
+ 
+ println("${s1name}\t${s1.getSequenceAsString(1,50,Strand.POSITIVE)}")
+ println("${s2name}\t${s2.getSequenceAsString(1,50,Strand.POSITIVE)}")
+ 
+
+
+
+
+//SequenceView<C>	getSubSequence​(Integer bioStart, Integer bioEnd)

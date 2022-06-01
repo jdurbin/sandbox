@@ -1,0 +1,54 @@
+#!/usr/bin/env groovy 
+
+// https://www.wikiwand.com/en/BioJava
+
+@Grapes(
+    @Grab(group='org.biojava', module='biojava-core', version='6.0.5')
+)
+
+
+import java.io.*; 
+import java.util.*;
+import org.biojava.nbio.core.sequence.*
+import org.biojava.nbio.core.sequence.compound.*
+import org.biojava.nbio.core.sequence.io.*
+import org.biojava.nbio.core.util.*
+
+
+
+// Read sequence dictionary for HLA
+seqFile = "data/S2_callseqs.fa"
+//seqdict = SeqIO.to_dict(SeqIO.parse(open(seqFile),'fasta'))
+
+bis = new BufferedInputStream(new FileInputStream(seqFile));
+//db = SeqIOTools.readFasta(bis, alphabet);
+
+
+faReader = new FastaReader<DNASequence,NucleotideCompound>(bis,
+	new PlainFastaHeaderParser<DNASequence,NucleotideCompound>(),
+	new DNASequenceCreator(AmbiguityDNACompoundSet.getDNACompoundSet()));
+
+//LinkedHashMap<String, DNASequence> seq = parentReader.process();
+//DNASequence parentSeq = null;
+//if (seq.size() == 1) {
+//	parentSeq = seq.values().iterator().next();
+//}
+//bis.close();
+//return parentSeq;
+//	
+
+
+/**
+ * Read a fasta DNA sequence
+ * @param inStream
+ * @return
+ * @throws IOException
+public static LinkedHashMap<String, DNASequence> readFastaDNASequence(
+    InputStream inStream) throws IOException {
+  FastaReader<DNASequence, NucleotideCompound> fastaReader = new FastaReader<DNASequence, NucleotideCompound>(
+      inStream,
+      new GenericFastaHeaderParser<DNASequence, NucleotideCompound>(),
+      new DNASequenceCreator(DNACompoundSet.getDNACompoundSet()));
+  return fastaReader.process();
+}
+*/

@@ -1,9 +1,6 @@
 #!/usr/bin/env groovy 
 
 // Grab the biojava jars if we don't already have them. 
-@Grapes(
-    @Grab(group='org.biojava', module='biojava-core', version='6.0.5')
-)
 
 import SeqUtils
 import org.biojava.nbio.core.sequence.*
@@ -22,17 +19,17 @@ famap.each{k,v->
 }
 
 // Lookup a couple of particular sequences. 
-s1name = "HLA:HLA22928"
-s2name = "HLA:HLA21257" 
+s1name = "HLA:HLA00010"
+s2name = "HLA:HLA00001" 
 s1 = famap[s1name]
 s2 = famap[s2name]
 
 // Print out a little more of these sequences.  
-println("${s1name}\t${s1.getSequenceAsString(1,70,Strand.POSITIVE)}")
-println("${s2name}\t${s2.getSequenceAsString(1,70,Strand.POSITIVE)}")
+println("${s1name}\t${s1.getSequenceAsString(1,s1.size(),Strand.POSITIVE)}")
+println("${s2name}\t${s2.getSequenceAsString(1,s2.size(),Strand.POSITIVE)}")
+println(s1.size())
+println(s2.size())
+println(s1.class)
  
-
-// ./fastaread.gv > bob.out  14.94s user
-
-
-//SequenceView<C>	getSubSequence​(Integer bioStart, Integer bioEnd)
+pair = SeqUtils.localAlignPair(s1,s2)
+println(pair)

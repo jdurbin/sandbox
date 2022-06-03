@@ -1,0 +1,1 @@
+Occasionally a sandbox test will be useful enough to promote to the utils directory which I will routinely include in my path where it can become party of my general kitchen sink of daily tools. 

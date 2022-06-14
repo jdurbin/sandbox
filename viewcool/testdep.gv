@@ -1,0 +1,12 @@
+#!/usr/bin/env groovy 
+
+
+// https://mvnrepository.com/artifact/ch.systems.cisd/jhdf5
+@Grapes(
+    @Grab(group='ch.systems.cisd', module='jhdf5', version='14.12.1')
+)
+
+import ch.systemsx.cisd.hdf5.HDF5Factory;
+
+
+println("Hello world!")

@@ -34,5 +34,7 @@ println("${s2name}\t${s2.getSequenceAsString(1,70,Strand.POSITIVE)}")
 
 // ./fastaread.gv > bob.out  14.94s user
 
+// On rnd server: 
+// real	0m6.578s
 
 //SequenceView<C>	getSubSequence​(Integer bioStart, Integer bioEnd)

@@ -1,0 +1,143 @@
+#!/usr/bin/env groovy 
+
+import javax.swing.WindowConstants as WC
+import groovy.swing.SwingBuilder
+import groovy.swing.*
+import java.awt.*;
+import java.awt.event.MouseListener
+import java.awt.event.MouseEvent
+import java.awt.event.MouseWheelEvent
+import java.awt.event.MouseMotionListener
+import java.awt.event.MouseWheelListener
+import java.text.NumberFormat
+import javax.swing.*
+import javax.swing.ButtonGroup
+import java.awt.BorderLayout as BL
+
+import Cooler
+import ContactHeatmap
+
+class CoolerPlot{
+	def mouseLabel
+	def genomicLabel
+	def plotFrame
+	def controlFrame
+	def swing
+	def gfx
+	def cool
+	def matrix
+	
+	static void main(args){
+		def coolerPlot = new CoolerPlot()
+		coolerPlot.run(args)
+	}
+			
+	void run(args){
+		def hdf5File = new File(args[0]);
+		def startCoord = args[1] as int
+		def endCoord = args[2] as int
+		def resolution = args[3] as int
+	
+		cool = new Cooler(hdf5File)
+		matrix = cool.matFromCool(startCoord,endCoord,resolution)
+	
+		def pixelsize=1 
+		def title = "${args[0]}:${startCoord}-${endCoord}"	    
+		def w = matrix.length*pixelsize
+		def h = matrix[0].length*pixelsize		
+		
+		swing = new SwingBuilder()	
+		
+		def resolutionChange = swing.action(closure:{actionEvent->
+				println "SWING ACTION:\t"+actionEvent.getActionCommand() // returns string 1000,2000,4000
+				//SWING ACTION:	ACTION_PERFORMED,cmd=4000,when=1565213639601,modifiers=Button1
+				//println "SWING ACTION:\t"+actionEvent.paramString() // returns string 1000,2000,4000
+				})	
+		
+		// Create someplace to store mouse label. 
+		controlFrame = swing.frame(title:"Info/Controls",size:[300,50],location:[700,50],pack:true,show:true){
+			borderLayout()
+			panel(preferredSize: new java.awt.Dimension(250,50),constraints:BL.NORTH){
+				mouseLabel = label()
+				genomicLabel = label()
+			}
+			
+			btnpanel = panel(preferredSize: new java.awt.Dimension(300,50),constraints:BL.SOUTH,name:'Resolution'){
+				buttonGroup(id:'res');
+				radioButton(action:resolutionChange,id:'1000',text:'1000',selected:false,buttonGroup:res)
+				radioButton(action:resolutionChange,id:'2000',text:'2000',selected:false,buttonGroup:res)
+				radioButton(action:resolutionChange,id:'4000',text:'4000',selected:false,buttonGroup:res)
+				radioButton(action:resolutionChange,id:'8000',text:'8000',selected:false,buttonGroup:res)
+			}
+			
+			btnpanel.setBorder(BorderFactory.createTitledBorder("Resolution"));
+			
+		}
+		controlFrame.show()
+		
+		plotFrame = swing.frame(
+	        title:title,
+	        location:[20,20],
+	        size:[w, h],
+			resizable:false,			
+	        defaultCloseOperation:WC.EXIT_ON_CLOSE
+		)	              			    
+
+		plotFrame.show()				   		
+		plotFrame.addMouseListener(this.&displayEvent as MouseListener)		
+
+	    Cursor cursor = new Cursor(Cursor.CROSSHAIR_CURSOR);
+	    plotFrame.setCursor(cursor);
+
+	    gfx = plotFrame.graphics  
+		
+		ContactHeatmap.plotMatrix(matrix,gfx,pixelsize)           
+		//plotMatrix(matrix,gfx,pixelsize)			   						
+	}
+	
+	void selectResolution(e){
+		print("Select resolution")
+	}
+
+	void displayEvent(MouseEvent e){
+		// each pixel is 2x2 dots.  
+		int col = (e.x < matrix.length) ? e.x : matrix.length-1 
+		int row = (e.y < matrix.length) ? e.y : matrix.length-1 
+		def count = matrix[row][col]
+		def newMouseText = " x: ${e.x}  y:${e.y}  button:${e.button}  count:${count}"
+		//println newMouseText		
+		mouseLabel.text=newMouseText
+		
+		def (gx,gy) = cool.genomeFromMatIdx(row,col)
+		//def gxstr = NumberFormat.getIntegerInstance().format(gx);
+		//def gystr = NumberFormat.getIntegerInstance().format(gy);
+		def newGenText = "gx: $gx\tgy: $gy"	
+		genomicLabel.text=newGenText	
+	}	
+
+	// random integer
+	def rnd(upperBound){
+    	(int)(Math.random() * upperBound)
+	}
+
+	def plotMatrix(matrix,g,pixelsize){
+		// Clear it first. 
+	    g.setColor(java.awt.Color.BLACK)
+	    g.fillRect(0, 0, matrix.length, matrix.length)	
+				
+		(0..<matrix.length).each{row->
+			(0..<matrix[0].length).each{col->
+				int count = matrix[row][col]
+				int alpha = count*25 as int
+				alpha = (alpha > 255) ? 255 : alpha
+				def colour
+				int red = 250
+				int grn = 150
+				int blu = 0
+				colour = new java.awt.Color(red,grn,blu,alpha)
+				g.color = colour
+				g.fillRect(col * pixelsize, row * pixelsize, pixelsize, pixelsize)
+			}	
+		}
+	}
+}	

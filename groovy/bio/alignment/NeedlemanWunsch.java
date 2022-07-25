@@ -39,9 +39,6 @@ class NeedlemanWunsch{
 	void findMinPenalty(){
 		int i, j; // initialising variables
 		
-		System.err.println("CHECK0");
-	
-		System.err.println("dp:  "+dp);	
 		for (int[] x1 : dp)
 			Arrays.fill(x1, 0);
 
@@ -51,15 +48,13 @@ class NeedlemanWunsch{
 			dp[0][i] = i * pgap;
 		}
 		
-		System.err.println("CHECK1");
-
 		// calculating the minimum penalty
 		for (i = 1; i <= m; i++){
 			for (j = 1; j <= n; j++){
 				if (x.charAt(i - 1) == y.charAt(j - 1)){
 					dp[i][j] = dp[i - 1][j - 1];
 				}else{
-					dp[i][j] = Math.min(Math.min(dp[i - 1][j - 1] + pxy ,
+					dp[i][j] = Math.min(Math.min(dp[i-1][j - 1] + pxy ,
 						dp[i - 1][j] + pgap) ,
 							dp[i][j - 1] + pgap );
 				}

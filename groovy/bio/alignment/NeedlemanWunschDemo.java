@@ -10,7 +10,7 @@ import java.lang.*;
 class NeedlemanWunschDemo{
 	
 	// function to find out the minimum penalty
-	static void getMinimumPenalty(String x, String y,int pxy, int pgap)
+	static int getMinimumPenalty(String x, String y,int pxy, int pgap)
 	{
 		int i, j; // initialising variables
 	
@@ -99,8 +99,8 @@ class NeedlemanWunschDemo{
 		}
 
 		// Printing the final answer
-		System.out.print("Minimum Penalty in " +"aligning the genes = ");
-		System.out.print(dp[m][n] + "\n");
+		//System.out.print("Minimum Penalty in " +"aligning the genes = ");
+		//System.out.print(dp[m][n] + "\n");
 
 		/*
 		System.out.println("The aligned genes are :");
@@ -112,7 +112,7 @@ class NeedlemanWunschDemo{
 			System.out.print((char)yans[i]);
 		}
 		*/
-		return;
+		return(dp[m][n]);
 	}
 
 	// Driver code
@@ -127,14 +127,20 @@ class NeedlemanWunschDemo{
 
 		// calling the function to
 		// calculate the result		
-		for(int i = 0; i < 2;i++){
-			getMinimumPenalty(seq1, seq2,misMatchPenalty, gapPenalty);
+		for(int i = 0; i < 200;i++){
+			int minPenalty = getMinimumPenalty(seq1, seq2,misMatchPenalty, gapPenalty);
 		}
 		
 		System.out.println("\n");
 	}
 }
 
+// Macbook Pro, single thread: 
+// 50X 		java -cp ./ NeedlemanWunschDemo  4.41s user
+// 100X 	8.94s
+
+
+////////////////////////////////////////////////////
 // java -cp ./ GFG  0.46s user 0.20s system 164% cpu 0.402 total
 // 20X 	java -cp ./ NeedlemanWunsch  2.20s
 // 40X  java -cp ./ NeedlemanWunsch  3.58s

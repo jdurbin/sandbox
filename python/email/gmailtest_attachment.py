@@ -22,8 +22,12 @@ server = smtplib.SMTP('smtp.gmail.com',587) #port 465 or 587
 server.starttls()
 # server.ehlo()
 
-# Security Alert:  This is a clear text password!!
-server.login(sender,'qkqwesilxpfnwlwe')
+# Security Alert:  This is just to keep the password out of github, it's 
+# not really secure.  Easy enough to add interactive password generation
+# but for my purposes being in a file on my machine is secure enough. 
+with open('password.txt', 'r') as file:
+    app_password = file.read()
+server.login(sender,app_password)
 
 msg = EmailMessage()
 msg['From'] = sender

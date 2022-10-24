@@ -1,0 +1,12 @@
+#!/usr/bin/env groovy 
+
+
+f = new File("bob.txt")
+
+File.properties.each{
+	println "PROP: "+it
+}
+
+File.methods.each{
+	println it
+}

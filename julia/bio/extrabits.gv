@@ -1,0 +1,42 @@
+/**
+* Read a fasta DNA sequence
+* @param inStream
+* @return
+* @throws IOException
+* 
+* Function found online
+*/
+public static LinkedHashMap<String, DNASequence> readFastaDNASequence(
+	InputStream inStream) throws IOException {
+		FastaReader<DNASequence, NucleotideCompound> fastaReader = new FastaReader<DNASequence, NucleotideCompound>(
+			inStream,
+			new GenericFastaHeaderParser<DNASequence, NucleotideCompound>(),
+			new DNASequenceCreator(DNACompoundSet.getDNACompoundSet()));
+			return fastaReader.process();
+		}
+
+
+		// Simply function in Groovy way...
+		static def readFastaDNASequence2(InputStream inStream){
+			fastaReader = new FastaReader<DNASequence, NucleotideCompound>(inStream,
+				new GenericFastaHeaderParser<DNASequence, NucleotideCompound>(),
+				new DNASequenceCreator(DNACompoundSet.getDNACompoundSet()))
+  
+				return fastaReader.process()
+			}
+
+			// Remap sequences to the short name instead of the entire header line. 
+			static def readFastaDNASequence3(InputStream inStream){
+				fastaReader = new FastaReader<DNASequence, NucleotideCompound>(inStream,
+					new GenericFastaHeaderParser<DNASequence, NucleotideCompound>(),
+					new DNASequenceCreator(DNACompoundSet.getDNACompoundSet()))
+  
+					fullname2seq = fastaReader.process()
+  
+					name2seq = [:]
+					fullname2seq.each{fullname,seq->
+						name = fullname.split(" ")[0]
+						name2seq[name] = seq
+					}
+					return name2seq
+				}

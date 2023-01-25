@@ -1,0 +1,27 @@
+#!/usr/bin/env groovy 
+
+// import necessary libraries
+import static tech.tablesaw.aggregate.AggregateFunctions.*
+import static tech.tablesaw.columns.ColumnType.*
+import tech.tablesaw.api.*
+import tech.tablesaw.plotly.Plot
+import tech.tablesaw.plotly.api.*
+
+// specify the file to read in
+def file = new File("beer.tab")
+
+// create a TableSaw table from the data in the file
+def table = Table.read().usingOptions(
+  "header=true",
+  "delimiter=\t"
+).csv(file.toPath())
+
+// compute the correlation between the price and calories columns
+def correlation = table.column("price").correlation(table.column("calories"))
+println "Correlation between price and calories: $correlation"
+
+// create a scatter plot of the price vs calories data
+def plot = ScatterPlot.create("Price vs Calories",
+                              table.numberColumn("price"),
+                              table.numberColumn("calories"))
+plot.show()

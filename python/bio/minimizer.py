@@ -1,6 +1,7 @@
-#!/usr/bin/env python
 
-seq="ATGCGATATCGTAGGCGTCGATGGAGAGCTAGATCGATCGATCTAAATCCCGATCGATTCCGAGCGCGATCAAAGCGCGATAGGCTAGCTAAAGCTAGCA"
+#%%
+#seq="ATGCGATATCGTAGGCGTCGATGGAGAGCTAGATCGATCGATCTAAATCCCGATCGATTCCGAGCGCGATCAAAGCGCGATAGGCTAGCTAAAGCTAGCA"
+seq = "GCTTAT"
 
 rev=seq[::-1]
 
@@ -11,10 +12,12 @@ rev=rev.replace("C","X")
 rev=rev.replace("G","C")
 rev=rev.replace("X","G")
 
-Kmer=31
-M=7
+#%%
+Kmer=6
+M=3
 L=len(seq)
 
+#%%
 for i in range(0, L-Kmer+1):
 
         sub_f=seq[i:i+Kmer]
@@ -29,4 +32,7 @@ for i in range(0, L-Kmer+1):
                 if sub2 < min:
                         min=sub2
 
-        print sub_f,min
+        print(sub_f,min)
+
+
+# %%

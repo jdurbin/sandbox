@@ -3,7 +3,6 @@
 from collections import Counter
 
 
-
 names = ['bob','mary','bob','bob','alice','bob']
 
 c = Counter()

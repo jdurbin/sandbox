@@ -1,6 +1,7 @@
 #!/usr/bin/env julia 
 using FASTX
 using BioAlignments
+using ArgParse
 
 # Read sequence dictionary for HLA
 seqFile = "data/S2_callseqs.fa"
@@ -18,6 +19,7 @@ hlaseq = name2seq[target]
 
 # Read chromosome 6
 chr6File= "data/chr6_hg38.fa"
+
 chr6record = FASTA.Record()
 reader = open(FASTA.Reader,chr6File)
 read!(reader,chr6record)
@@ -32,6 +34,8 @@ scoremodel = AffineGapScoreModel(EDNAFULL, gap_open=-5, gap_extend=-1);
 res = pairalign(LocalAlignment(),hlaref,hlaseq,scoremodel)
 
 print(res)
+
+prettyprint(stdout, res)
 
 # HLA-DQA1
 # ./cutandalign.jl  2.58s user 0.86s system 101% cpu 3.398 total

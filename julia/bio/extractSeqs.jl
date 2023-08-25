@@ -18,7 +18,6 @@ open(FASTA.Reader,seqFile) do reader
 		name = FASTA.identifier(record)	
 		FASTA.identifier		
 		
-		
 		#type2seq[name]=FASTA.sequence(record)
 	end
 end

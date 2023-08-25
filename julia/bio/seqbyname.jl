@@ -2,19 +2,28 @@
 
 using FASTX
 
-seqFile = "data/hla_gen.fa"
+# Get the input FASTA file name and sequence name from command line arguments
+if length(ARGS) < 3
+	println("seqbyname.jl input targetname output")
+	exit()
+end
 
-name2seq = Dict()
-open(FASTA.Reader,seqFile) do reader
+input_file = ARGS[1]
+sequence_name = ARGS[2]
+output_file = ARGS[3]
+
+
+open(FASTA.Reader,input_file) do reader
 	for record in reader
-		name2seq[FASTA.identifier(record)]=FASTA.sequence
+		if FASTA.identifier(record) == sequence_name
+			open(FASTA.Writer,output_file) do writer
+				write(writer,record)
+			end			
+			break
+		end
 	end
 end
 
-print(name2seq["HLA:HLA16652_A*01:01:01:09_3340_bp"])
-
-
-# time ./seqbyname.jl
-# sequence./seqbyname.jl  1.28s user 0.27s system 112% cpu 1.375 total
-
-# ./seqbyname.py  0.50s user 0.09s system 99% cpu 0.598 total
+# Holy crap this is fast... not sure I believe it. 
+# 5s 	for chr6
+# 6.7s 	for chr20 

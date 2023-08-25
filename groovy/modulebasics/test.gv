@@ -1,9 +1,16 @@
 #!/usr/bin/env groovy 
 
 import BobClass
-
+import NakedMethods
 
 bc = new BobClass()
-
 bc.doIt()
 
+// This works because NakedMethods implicitly creates a containing class 
+// and the method is declared as static.  
+NakedMethods.wingIt()
+
+// Alternately you can explicitly create the NakedMethods object 
+// and call the method that way. 
+nm = new NakedMethods()
+nm.wingIt()

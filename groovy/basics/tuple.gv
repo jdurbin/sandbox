@@ -1,0 +1,13 @@
+#!/usr/bin/env groovy 
+
+
+t = ["gm","gm1.fastq","gm2.fastq"]
+
+println t
+
+(id,r1,r2) = t
+
+println(id)
+println(r1)
+println(r2)
+

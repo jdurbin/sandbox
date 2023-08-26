@@ -1,0 +1,1 @@
+These are sandbox items that have become useful enough to want to put them in my bin path.  Most are trivial and all are quick and dirty, but these are things I do frequently. 
